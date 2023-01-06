@@ -224,22 +224,24 @@
 
         <div class="tab-pane fade" id="tab-upgrades" role="tabpanel">
             <div class="card-body">
-                <h5>{{ 'Choose which products can client upgrade to'|trans }}</h5>
+                <h5>{{ 'Choose which products clients can upgrade to'|trans }}</h5>
                 <form method="post" action="admin/product/update" class="api-form" data-api-msg="{{ 'Product configuration updated'|trans }}">
                     <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
-                    <div class="form-group mb-3 row">
-                        <label class="form-label col-3 col-form-label">{{ 'Product Upgrades'|trans }}</label>
-                        <div class="col">
+                    <table class="table card-table table-vcenter table-striped text-nowrap">
+                        <tbody>
                             {% set products = admin.product_get_pairs %}
-                            <input type="hidden" name="upgrades">
-                            <select name="upgrades[]" multiple="multiple" class="form-select" size="{{ products|length }}">
-                                {% for id,ptitle in products %}
-                                <option value="{{ id }}"{% if product.upgrades[id] %} selected{% endif %}>{{ ptitle }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
+                            {% for id,ptitle in products %}
+                            <tr>
+                                <td class="w-1">
+                                    <input class="form-check-input" type="checkbox" name="upgrades[{{ id }}]" value="1" id="upgrades{{ id }}" {% if product.upgrades[id] %} checked{% endif %}>
+                                </td>
+                                <td>
+                                    <label for="upgrades[{{ id }}]">{{ ptitle }}</label>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     <input type="hidden" name="id" value="{{ product.id }}">
                     <button type="submit" class="btn btn-primary w-100">{{ 'Update'|trans }}</button>
                 </form>
